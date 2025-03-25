@@ -10,10 +10,10 @@ from mcp.server import NotificationOptions, Server
 import mcp.server.stdio
 
 # Import our direct MCP tool definitions for Windsurf compatibility
-from mcp_tools import get_mcp_tools_list
-from handlers import handle_tool_call
-from utils import validate_tool_registration, app_state
-import url_scheme
+from src.things_mcp.mcp_tools import get_mcp_tools_list
+from src.things_mcp.handlers import handle_tool_call
+from src.things_mcp.utils import validate_tool_registration, app_state
+from src.things_mcp import url_scheme
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
