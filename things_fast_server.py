@@ -3,14 +3,14 @@
 Main entry point for running the Things MCP server.
 This version uses the modern FastMCP pattern for better maintainability.
 """
+
 import logging
 import sys
-from src.things_mcp.fast_server import mcp, run_things_mcp_server
+from src.things_mcp.fast_server import run_things_mcp_server
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 

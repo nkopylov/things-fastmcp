@@ -1,22 +1,21 @@
 import subprocess
 import logging
-from typing import Dict, Any, Optional, List, Union
+from typing import Optional, List, Union
 
 logger = logging.getLogger(__name__)
+
 
 def run_applescript(script: str) -> str:
     """Run an AppleScript and return the result as a string."""
     try:
         result = subprocess.run(
-            ["osascript", "-e", script],
-            capture_output=True,
-            text=True,
-            check=True
+            ["osascript", "-e", script], capture_output=True, text=True, check=True
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         logger.error(f"AppleScript error: {e.stderr}")
         return ""
+
 
 def add_todo_direct(
     title: str,
@@ -28,35 +27,41 @@ def add_todo_direct(
     # Convert tags list to comma-separated string if it's a list
     if isinstance(tags, list):
         tags = ", ".join(tags)
-    
+
     # Build the AppleScript
-    script = '''
+    script = (
+        """
     tell application "Things3"
         set newToDo to make new to do with properties {name:"%s"}
-    ''' % title
-    
+    """
+        % title
+    )
+
     # Add optional properties
     if notes:
-        script += '''
+        script += """
         set notes of newToDo to "%s"
-        ''' % notes.replace('"', '\\"')
-    
+        """ % notes.replace('"', '\\"')
+
     if when:
-        script += '''
+        script += (
+            """
         set activation date of newToDo to date "%s"
-        ''' % when
-    
+        """
+            % when
+        )
+
     if tags:
-        script += '''
+        script += """
         set tagList to {}
-        '''
-        
+        """
+
         # Handle comma-separated list of tags
         if isinstance(tags, str):
             tags_list = [t.strip() for t in tags.split(",")]
             for tag in tags_list:
                 if tag:
-                    script += '''
+                    script += """
                     -- Ensure tag exists
                     set tagExists to false
                     repeat with t in tags
@@ -71,18 +76,18 @@ def add_todo_direct(
                         set newTag to make new tag with properties {name:"%s"}
                         set end of tagList to newTag
                     end if
-                    ''' % (tag, tag)
-            
-            script += '''
+                    """ % (tag, tag)
+
+            script += """
             set tag of newToDo to tagList
-            '''
-    
+            """
+
     # Complete the script and get the ID
-    script += '''
+    script += """
         return id of newToDo
     end tell
-    '''
-    
+    """
+
     # Execute the AppleScript
     try:
         result = run_applescript(script)
@@ -92,6 +97,7 @@ def add_todo_direct(
         logger.error(f"Failed to create todo: {e}")
         return ""
 
+
 def update_todo_direct(
     id: str,
     title: Optional[str] = None,
@@ -100,62 +106,71 @@ def update_todo_direct(
     deadline: Optional[str] = None,
     tags: Optional[Union[str, List[str]]] = None,
     completed: Optional[bool] = None,
-    canceled: Optional[bool] = None
+    canceled: Optional[bool] = None,
 ) -> bool:
     """Update a todo in Things using AppleScript."""
     # Convert tags list to comma-separated string if it's a list
     if isinstance(tags, list):
         tags = ", ".join(tags)
-    
+
     # Build the AppleScript
-    script = '''
+    script = (
+        """
     tell application "Things3"
         try
             set theToDo to to do id "%s"
-    ''' % id
-    
+    """
+        % id
+    )
+
     # Add updates for each property
     if title is not None:
-        script += '''
+        script += """
             set name of theToDo to "%s"
-        ''' % title.replace('"', '\\"')
-    
+        """ % title.replace('"', '\\"')
+
     if notes is not None:
-        script += '''
+        script += """
             set notes of theToDo to "%s"
-        ''' % notes.replace('"', '\\"')
-    
+        """ % notes.replace('"', '\\"')
+
     if when is not None:
         if when == "":
-            script += '''
+            script += """
             set activation date of theToDo to missing value
-            '''
+            """
         else:
-            script += '''
+            script += (
+                """
             set activation date of theToDo to date "%s"
-            ''' % when
-    
+            """
+                % when
+            )
+
     if deadline is not None:
         if deadline == "":
-            script += '''
+            script += """
             set deadline of theToDo to missing value
-            '''
+            """
         else:
-            script += '''
+            script += (
+                """
             set deadline of theToDo to date "%s"
-            ''' % deadline
-    
+            """
+                % deadline
+            )
+
     if tags is not None:
-        script += '''
+        script += """
         set tagList to {}
-        '''
-        
+        """
+
         # Handle comma-separated list of tags
         if isinstance(tags, str):
             tags_list = [t.strip() for t in tags.split(",")]
             for tag in tags_list:
                 if tag:
-                    script += '''
+                    script += """
                     -- Ensure tag exists
                     set tagExists to false
                     repeat with t in tags
@@ -170,42 +185,42 @@ def update_todo_direct(
                         set newTag to make new tag with properties {name:"%s"}
                         set end of tagList to newTag
                     end if
-                    ''' % (tag, tag)
-            
-            script += '''
+                    """ % (tag, tag)
+
+            script += """
             set tag of theToDo to tagList
-            '''
-    
+            """
+
     if completed is not None:
         if completed:
-            script += '''
+            script += """
             set status of theToDo to completed
-            '''
+            """
         else:
-            script += '''
+            script += """
             set status of theToDo to open
-            '''
-    
+            """
+
     if canceled is not None:
         if canceled:
-            script += '''
+            script += """
             set status of theToDo to canceled
-            '''
+            """
         else:
-            script += '''
+            script += """
             set status of theToDo to open
-            '''
-    
+            """
+
     # Complete the script
-    script += '''
+    script += """
             return id of theToDo
         on error errMsg
             log "Error updating todo: " & errMsg
             return ""
         end try
     end tell
-    '''
-    
+    """
+
     # Execute the AppleScript
     try:
         result = run_applescript(script)

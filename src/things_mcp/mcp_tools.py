@@ -3,13 +3,15 @@
 MCP tools configuration for Things integration with Windsurf.
 This ensures proper tool registration and naming for seamless integration.
 """
+
 import mcp.types as types
 from typing import List
+
 
 def get_mcp_tools_list() -> List[types.Tool]:
     """
     Return the list of MCP tools with consistent naming between registration and implementation.
-    
+
     Uses consistent naming without prefixes to ensure proper tool functioning.
     """
     return [
@@ -27,8 +29,8 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "include_items": {
                         "type": "boolean",
                         "description": "Include checklist items",
-                        "default": True
-                    }
+                        "default": True,
+                    },
                 },
                 "required": [],
             },
@@ -42,7 +44,7 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "include_items": {
                         "type": "boolean",
                         "description": "Include tasks within projects",
-                        "default": False
+                        "default": False,
                     }
                 },
                 "required": [],
@@ -57,13 +59,12 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "include_items": {
                         "type": "boolean",
                         "description": "Include projects and tasks within areas",
-                        "default": False
+                        "default": False,
                     }
                 },
                 "required": [],
             },
         ),
-
         # List views
         types.Tool(
             name="get-inbox",
@@ -119,14 +120,14 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "period": {
                         "type": "string",
                         "description": "Time period to look back (e.g., '3d', '1w', '2m', '1y'). Defaults to '7d'",
-                        "pattern": "^\\d+[dwmy]$"
+                        "pattern": "^\\d+[dwmy]$",
                     },
                     "limit": {
                         "type": "integer",
                         "description": "Maximum number of entries to return. Defaults to 50",
                         "minimum": 1,
-                        "maximum": 100
-                    }
+                        "maximum": 100,
+                    },
                 },
                 "required": [],
             },
@@ -140,7 +141,6 @@ def get_mcp_tools_list() -> List[types.Tool]:
                 "required": [],
             },
         ),
-
         # Tag operations
         types.Tool(
             name="get-tags",
@@ -151,7 +151,7 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "include_items": {
                         "type": "boolean",
                         "description": "Include items tagged with each tag",
-                        "default": False
+                        "default": False,
                     }
                 },
                 "required": [],
@@ -163,15 +163,11 @@ def get_mcp_tools_list() -> List[types.Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "tag": {
-                        "type": "string",
-                        "description": "Tag title to filter by"
-                    }
+                    "tag": {"type": "string", "description": "Tag title to filter by"}
                 },
                 "required": ["tag"],
             },
         ),
-
         # Search operations
         types.Tool(
             name="search-todos",
@@ -196,34 +192,27 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "status": {
                         "type": "string",
                         "enum": ["incomplete", "completed", "canceled"],
-                        "description": "Filter by todo status"
+                        "description": "Filter by todo status",
                     },
                     "start_date": {
                         "type": "string",
-                        "description": "Filter by start date (YYYY-MM-DD)"
+                        "description": "Filter by start date (YYYY-MM-DD)",
                     },
                     "deadline": {
                         "type": "string",
-                        "description": "Filter by deadline (YYYY-MM-DD)"
+                        "description": "Filter by deadline (YYYY-MM-DD)",
                     },
-                    "tag": {
-                        "type": "string",
-                        "description": "Filter by tag"
-                    },
-                    "area": {
-                        "type": "string",
-                        "description": "Filter by area UUID"
-                    },
+                    "tag": {"type": "string", "description": "Filter by tag"},
+                    "area": {"type": "string", "description": "Filter by area UUID"},
                     "type": {
                         "type": "string",
                         "enum": ["to-do", "project", "heading"],
-                        "description": "Filter by item type"
-                    }
+                        "description": "Filter by item type",
+                    },
                 },
                 "required": [],
             },
         ),
-
         # Recent items
         types.Tool(
             name="get-recent",
@@ -234,13 +223,12 @@ def get_mcp_tools_list() -> List[types.Tool]:
                     "period": {
                         "type": "string",
                         "description": "Time period (e.g., '3d', '1w', '2m', '1y')",
-                        "pattern": "^\\d+[dwmy]$"
+                        "pattern": "^\\d+[dwmy]$",
                     }
                 },
                 "required": ["period"],
             },
         ),
-
         # Things URL Scheme tools
         types.Tool(
             name="add-todo",
@@ -248,138 +236,105 @@ def get_mcp_tools_list() -> List[types.Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string",
-                        "description": "Title of the todo"
-                    },
-                    "notes": {
-                        "type": "string",
-                        "description": "Notes for the todo"
-                    },
+                    "title": {"type": "string", "description": "Title of the todo"},
+                    "notes": {"type": "string", "description": "Notes for the todo"},
                     "when": {
                         "type": "string",
-                        "description": "When to schedule the todo (today, tomorrow, evening, anytime, someday, or YYYY-MM-DD)"
+                        "description": "When to schedule the todo (today, tomorrow, evening, anytime, someday, or YYYY-MM-DD)",
                     },
                     "deadline": {
                         "type": "string",
-                        "description": "Deadline for the todo (YYYY-MM-DD)"
+                        "description": "Deadline for the todo (YYYY-MM-DD)",
                     },
                     "tags": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Tags to apply to the todo"
+                        "description": "Tags to apply to the todo",
                     },
                     "checklist_items": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Checklist items to add"
+                        "description": "Checklist items to add",
                     },
                     "list_id": {
                         "type": "string",
-                        "description": "ID of project/area to add to"
+                        "description": "ID of project/area to add to",
                     },
                     "list_title": {
                         "type": "string",
-                        "description": "Title of project/area to add to"
+                        "description": "Title of project/area to add to",
                     },
                     "heading": {
                         "type": "string",
-                        "description": "Heading to add under"
-                    }
+                        "description": "Heading to add under",
+                    },
                 },
-                "required": ["title"]
-            }
+                "required": ["title"],
+            },
         ),
-
         types.Tool(
             name="add-project",
             description="Create a new project in Things",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string",
-                        "description": "Title of the project"
-                    },
-                    "notes": {
-                        "type": "string",
-                        "description": "Notes for the project"
-                    },
+                    "title": {"type": "string", "description": "Title of the project"},
+                    "notes": {"type": "string", "description": "Notes for the project"},
                     "when": {
                         "type": "string",
-                        "description": "When to schedule the project"
+                        "description": "When to schedule the project",
                     },
                     "deadline": {
                         "type": "string",
-                        "description": "Deadline for the project"
+                        "description": "Deadline for the project",
                     },
                     "tags": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Tags to apply to the project"
+                        "description": "Tags to apply to the project",
                     },
                     "area_id": {
                         "type": "string",
-                        "description": "ID of area to add to"
+                        "description": "ID of area to add to",
                     },
                     "area_title": {
                         "type": "string",
-                        "description": "Title of area to add to"
+                        "description": "Title of area to add to",
                     },
                     "todos": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Initial todos to create in the project"
-                    }
+                        "description": "Initial todos to create in the project",
+                    },
                 },
-                "required": ["title"]
-            }
+                "required": ["title"],
+            },
         ),
-
         types.Tool(
             name="update-todo",
             description="Update an existing todo in Things",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "ID of the todo to update"
-                    },
-                    "title": {
-                        "type": "string",
-                        "description": "New title"
-                    },
-                    "notes": {
-                        "type": "string",
-                        "description": "New notes"
-                    },
-                    "when": {
-                        "type": "string",
-                        "description": "New schedule"
-                    },
-                    "deadline": {
-                        "type": "string",
-                        "description": "New deadline"
-                    },
+                    "id": {"type": "string", "description": "ID of the todo to update"},
+                    "title": {"type": "string", "description": "New title"},
+                    "notes": {"type": "string", "description": "New notes"},
+                    "when": {"type": "string", "description": "New schedule"},
+                    "deadline": {"type": "string", "description": "New deadline"},
                     "tags": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "New tags"
+                        "description": "New tags",
                     },
                     "completed": {
                         "type": "boolean",
-                        "description": "Mark as completed"
+                        "description": "Mark as completed",
                     },
-                    "canceled": {
-                        "type": "boolean",
-                        "description": "Mark as canceled"
-                    }
+                    "canceled": {"type": "boolean", "description": "Mark as canceled"},
                 },
-                "required": ["id"]
-            }
+                "required": ["id"],
+            },
         ),
-
         types.Tool(
             name="update-project",
             description="Update an existing project in Things",
@@ -388,57 +343,37 @@ def get_mcp_tools_list() -> List[types.Tool]:
                 "properties": {
                     "id": {
                         "type": "string",
-                        "description": "ID of the project to update"
+                        "description": "ID of the project to update",
                     },
-                    "title": {
-                        "type": "string",
-                        "description": "New title"
-                    },
-                    "notes": {
-                        "type": "string",
-                        "description": "New notes"
-                    },
-                    "when": {
-                        "type": "string",
-                        "description": "New schedule"
-                    },
-                    "deadline": {
-                        "type": "string",
-                        "description": "New deadline"
-                    },
+                    "title": {"type": "string", "description": "New title"},
+                    "notes": {"type": "string", "description": "New notes"},
+                    "when": {"type": "string", "description": "New schedule"},
+                    "deadline": {"type": "string", "description": "New deadline"},
                     "tags": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "New tags"
+                        "description": "New tags",
                     },
                     "completed": {
                         "type": "boolean",
-                        "description": "Mark as completed"
+                        "description": "Mark as completed",
                     },
-                    "canceled": {
-                        "type": "boolean",
-                        "description": "Mark as canceled"
-                    }
+                    "canceled": {"type": "boolean", "description": "Mark as canceled"},
                 },
-                "required": ["id"]
-            }
+                "required": ["id"],
+            },
         ),
-
         types.Tool(
             name="search-items",
             description="Search for items in Things",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Search query"
-                    }
+                    "query": {"type": "string", "description": "Search query"}
                 },
-                "required": ["query"]
-            }
+                "required": ["query"],
+            },
         ),
-
         types.Tool(
             name="show-item",
             description="Show a specific item or list in Things",
@@ -447,19 +382,19 @@ def get_mcp_tools_list() -> List[types.Tool]:
                 "properties": {
                     "id": {
                         "type": "string",
-                        "description": "ID of item to show, or one of: inbox, today, upcoming, anytime, someday, logbook"
+                        "description": "ID of item to show, or one of: inbox, today, upcoming, anytime, someday, logbook",
                     },
                     "query": {
                         "type": "string",
-                        "description": "Optional query to filter by"
+                        "description": "Optional query to filter by",
                     },
                     "filter_tags": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Optional tags to filter by"
-                    }
+                        "description": "Optional tags to filter by",
+                    },
                 },
-                "required": ["id"]
-            }
-        )
+                "required": ["id"],
+            },
+        ),
     ]
